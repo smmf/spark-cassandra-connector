@@ -103,8 +103,9 @@ object DefaultSource {
   val CassandraDataSourceTableNameProperty = "c_table"
   val CassandraDataSourceKeyspaceNameProperty = "keyspace"
   val CassandraDataSourceClusterNameProperty = "cluster"
-  val CassandraDataSourUserDefinedSchemaNameProperty = "schema"
-  val CassandraDataSourPushdownEnableProperty = "push_down"
+  val CassandraDataSourceUserDefinedSchemaNameProperty = "schema"
+  val CassandraDataSourcePushdownEnableProperty = "push_down"
+  val CassandraDataSourceProviderName = DefaultSource.getClass.getPackage.getName
 
 
   /** Parse parameters into CassandraDataSourceOptions and TableIdent object */
@@ -112,9 +113,9 @@ object DefaultSource {
     val tableName = parameters(CassandraDataSourceTableNameProperty)
     val keyspaceName = parameters(CassandraDataSourceKeyspaceNameProperty)
     val clusterName = parameters.get(CassandraDataSourceClusterNameProperty)
-    val schema = parameters.get(CassandraDataSourUserDefinedSchemaNameProperty)
+    val schema = parameters.get(CassandraDataSourceUserDefinedSchemaNameProperty)
       .map(DataType.fromJson).map(_.asInstanceOf[StructType])
-    val pushdown : Boolean = parameters.getOrElse(CassandraDataSourPushdownEnableProperty, "true").toBoolean
+    val pushdown : Boolean = parameters.getOrElse(CassandraDataSourcePushdownEnableProperty, "true").toBoolean
 
     (TableIdent(tableName, keyspaceName, clusterName), CassandraDataSourceOptions(schema, pushdown))
   }
